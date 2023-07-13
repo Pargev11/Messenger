@@ -23,13 +23,10 @@ class Communicate(QObject):
 #                 self.mainwindow.flag = 0
 
 class Ui_Form(object):
-    def __init__(self,poisk,send_massag,sql,get_msg_data):
-        self.get_msg_data = get_msg_data
-        self.Change_sql = sql
-        self.poisk = poisk
+    def __init__(self,main):
+        self.main = main
         self.flag = 0
         self.poisk_client = []
-        self.send_massag = send_massag
         self.contact = ""
         # self.sob_flag = 0
         self.contacts = []
@@ -45,12 +42,12 @@ class Ui_Form(object):
         self.getevent = Communicate()
         self.getevent.event.connect(self.get_msg)
         self.change_sql = Communicate()
-        self.change_sql.event.connect(self.Change_sql)
+        self.change_sql.event.connect(self.main.change_sql)
 
   
     def poisk_text_change(self,text):
         self.pushButton_2.show()
-        self.poisk(text)
+        self.main.poisk(text)
 
     def click_on_but(self,anun):
         self.lineEdit_4.setText("")
@@ -67,7 +64,7 @@ class Ui_Form(object):
         print(anun)
         self.contact = anun
 
-        self.get_msg_data(anun)
+        self.main.get_msg_data(anun)
         # self.message_widjet()
         for i in self.msg_data:
             if i[0] == 'get':
@@ -126,7 +123,6 @@ class Ui_Form(object):
         self.pushButton_2.hide()
         
     def Msg_del(self):
-        print(len)
         for i in range(len(self.msg)):
             
 
@@ -215,7 +211,7 @@ class Ui_Form(object):
                 break
         if text != "":
             self.lineEdit.setText("")
-            self.send_massag(self.contact,text)
+            self.main.send(self.contact,text)
             self.message_widjet(text)
             
     def get_msg(self):
